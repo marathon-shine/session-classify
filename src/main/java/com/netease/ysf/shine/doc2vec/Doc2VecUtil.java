@@ -1,6 +1,8 @@
 package com.netease.ysf.shine.doc2vec;
 
 import com.alibaba.fastjson.JSONObject;
+import com.netease.ysf.shine.Constants;
+import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
 import org.deeplearning4j.models.paragraphvectors.ParagraphVectors;
 import org.deeplearning4j.text.sentenceiterator.LineSentenceIterator;
 import org.deeplearning4j.text.sentenceiterator.SentenceIterator;
@@ -13,11 +15,11 @@ import java.io.IOException;
 
 
 public class Doc2VecUtil {
-    public static void doc2Vec() {
-        String fileBase = "/Users/wangqi/Downloads/data/";
-        String inputFileName = "segmentOut.txt";
+    static String inputFileName = "mergedSegmentedFile.txt";
+    static String modelFileName = "doc2VecModel.bin";
 
-        SentenceIterator iter = new LineSentenceIterator(new File(fileBase + inputFileName));
+    public static void doc2VecTraning() {
+        SentenceIterator iter = new LineSentenceIterator(new File(Constants.fileBase + inputFileName));
         TokenizerFactory tokenizerFactory = new DefaultTokenizerFactory();
         tokenizerFactory.setTokenPreProcessor(new CommonPreprocessor());
 
@@ -25,7 +27,7 @@ public class Doc2VecUtil {
         ParagraphVectors paragraphVectors = new ParagraphVectors.Builder()
                 .learningRate(0.025)
                 .minLearningRate(0.001)
-                .batchSize(1000)
+                .batchSize(10000)
                 .epochs(10)
                 .iterate(iter)
                 .trainWordVectors(true)
@@ -34,11 +36,14 @@ public class Doc2VecUtil {
 
         // Start model training
         paragraphVectors.fit();
+
+        WordVectorSerializer.writeWord2VecModel(paragraphVectors, Constants.fileBase + modelFileName);
+
         double[] vec = paragraphVectors.getWordVector("面膜");
         System.out.println(JSONObject.toJSONString(vec));
     }
 
     public static void main(String[] args) throws IOException {
-        doc2Vec();
+        doc2VecTraning();
     }
 }
