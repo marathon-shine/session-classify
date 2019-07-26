@@ -6,6 +6,10 @@ import java.util.Map;
 public class Util {
 
     public static void printStatistics(Map<Integer, Statistics> statisticsMap) {
+        for (Map.Entry<Integer, Statistics> entrySet : statisticsMap.entrySet()) {
+            System.out.println("--------category: " + entrySet.getKey() + "-----------");
+            System.out.println(entrySet.getValue().statistics());
+        }
     }
 
     public static DataLine readFromFile(BufferedReader reader) throws IOException {
