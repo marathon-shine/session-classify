@@ -1,0 +1,48 @@
+﻿target/
+*.log*
+*.class
+*.patch
+generated/
+*dubbo-registry.properties*
+
+node_modules/
+/dist/*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+### wildcard ###
+*~
+*.iml
+*.class
+*.swp
+
+### file ###
+.DS_Store
+pom.xml.versionsBackup
+!.mvn/wrapper/maven-wrapper.jar
+
+### directory ###
+target/
+@log.path@/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.ipr
