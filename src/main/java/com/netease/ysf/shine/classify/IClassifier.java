@@ -1,12 +1,9 @@
 package com.netease.ysf.shine.classify;
 
-import java.io.File;
-import java.util.Map;
-
 public interface IClassifier {
 
-    void learn(File file);
+    void learn(double[] vector, int category);
 
-    Map<Integer, Statistics> predict(File file);
+    int predict(double[] vector);
 
 }

@@ -20,9 +20,9 @@ public class Util {
         }
         int category = Integer.parseInt(splits[0]);
         String[] vectorStrs = splits[1].substring(1, splits[1].length() - 1).split(",");
-        float[] vector = new float[vectorStrs.length];
+        double[] vector = new double[vectorStrs.length];
         for (int i = 0; i < vector.length; ++i) {
-            vector[i] = Float.parseFloat(vectorStrs[i]);
+            vector[i] = Double.parseDouble(vectorStrs[i]);
         }
 
         DataLine dataLine = new DataLine();

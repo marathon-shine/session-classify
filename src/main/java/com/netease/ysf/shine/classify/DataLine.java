@@ -6,6 +6,5 @@ import lombok.Data;
 public class DataLine {
 
     private int category;
-    private float[] vector;
-
+    private double[] vector;
 }

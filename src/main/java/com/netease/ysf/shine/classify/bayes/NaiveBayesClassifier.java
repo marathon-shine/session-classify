@@ -1,14 +1,9 @@
 package com.netease.ysf.shine.classify.bayes;
 
-import com.netease.ysf.shine.classify.IClassifier;
-import com.netease.ysf.shine.classify.Statistics;
+import com.netease.ysf.shine.classify.AbstractClassifier;
 import smile.classification.NaiveBayes;
 
-import java.io.File;
-import java.util.Map;
-import java.util.Random;
-
-public class NaiveBayesClassifier implements IClassifier {
+public class NaiveBayesClassifier extends AbstractClassifier {
 
     private static final int CLASS_AMOUNT= 1000;
     private static final int DIMENSION = 100;
@@ -16,12 +11,12 @@ public class NaiveBayesClassifier implements IClassifier {
    private NaiveBayes bayes = new NaiveBayes(NaiveBayes.Model.MULTINOMIAL, CLASS_AMOUNT, DIMENSION);
 
     @Override
-    public void learn(File file) {
-
+    public void learn(double[] vector, int category) {
+        bayes.learn(vector, category);
     }
 
     @Override
-    public Map<Integer, Statistics> predict(File file) {
-        return null;
+    public int predict(double[] vector) {
+        return bayes.predict(vector);
     }
 }
