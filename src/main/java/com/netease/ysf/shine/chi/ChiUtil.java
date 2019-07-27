@@ -3,14 +3,12 @@ package com.netease.ysf.shine.chi;
 import com.alibaba.fastjson.JSONObject;
 import com.hankcs.hanlp.HanLP;
 import com.netease.ysf.shine.doc2vec.Word2VecUtil;
-import com.netease.ysf.shine.tokenzier.JiebaCutter;
 import com.netease.ysf.shine.util.Constants;
 import com.netease.ysf.shine.util.GetTypeInfo;
 import com.netease.ysf.shine.util.SortUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
 import org.deeplearning4j.models.word2vec.Word2Vec;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -39,14 +37,20 @@ public class ChiUtil {
             for (int i = 0; i < keyword.size(); i++) {
                 String thisKey = keyword.get(i);
                 typeKeys.forEach( thisTypeKey -> {
-                    double distance = Word2VecUtil.calcuateSimilarity(word2Vec, thisKey, thisTypeKey);
-                    typeDistance.put(type, typeDistance.get(type) + distance);
+                    Collection<String> thisTypeKeyRelated = Word2VecUtil.queryRelatedWords(word2Vec, thisKey);
+                    thisTypeKeyRelated.add(thisTypeKey);
+                    thisTypeKeyRelated.forEach( one -> {
+                        double distance = Word2VecUtil.calcuateSimilarity(word2Vec, thisKey, one);
+                        if(!Double.isNaN(distance)) {
+                            typeDistance.put(type, typeDistance.get(type) + distance);
+                        }
+                    });
                 });
             }
         });
 
         List<Map.Entry<String,Double>> sorted = SortUtil.sortDoubleMap(typeDistance);
-        return sorted.get(sorted.size()-1).getKey();
+        return sorted.get(0).getKey();
     }
 
     public static Map<String, Set<String>> chiFileParser() throws IOException {
@@ -64,7 +68,7 @@ public class ChiUtil {
                         typeWords.put(type, new HashSet<>());
                     }
                     for (int i = 0; i < words.length; i++) {
-                        typeWords.get(type).add(words[i]);
+                        typeWords.get(type).add(words[i].split(":")[0]);
                     }
                 }
             }

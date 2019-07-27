@@ -63,8 +63,12 @@ public class Word2VecUtil {
         return cosSim;
     }
 
-    public static void queryRelatedWords(Word2Vec word2Vec, String... input) {
+    public static Collection<String> queryRelatedWords(Word2Vec word2Vec, String input) {
+        Collection<String> lst = word2Vec.wordsNearest(input, 10);
+        return lst;
+    }
 
+    public static void queryRelatedWords(Word2Vec word2Vec, String... input) {
         for(int i=0; i<input.length; i++) {
             Collection<String> lst = word2Vec.wordsNearest(input[i], 20);
             System.out.println("Related to: " + input[i] + " -> " + lst);
