@@ -20,23 +20,45 @@ public class FileProcessor {
 //                new Pair<>("694917", "new_message_694917_parsed.txt.simple.vec.txt")
 //        );
 
-        fileStatistics("parsed_all_session.txt.doc2vec.tran.txt");
+//        fileStatistics("parsed_all_session.txt.doc2vec.tran.txt");
+
+        splitTranAndTestFile("parsed_all_session.txt.doc2vec.tran.withtype.txt.topKeyword.bagofwords.vec.txt", 0.8d);
     }
 
-    public static void splitTranAndTestFile(String inputFileName) throws IOException {
+    public static void splitTranAndTestFile(String inputFileName, double percentOfTranSet) throws IOException {
         File inputFile = new File(Constants.fileBase + inputFileName );
         LineIterator it = FileUtils.lineIterator(inputFile, "UTF-8");
 
-        int tranCounter = 0;
-        int testCounter = 0;
+        Map<String, List<String>> store = new HashMap<>();
         try {
             while (it.hasNext()) {
                 String line = it.nextLine();
                 String[] splitted = line.split(Constants.spllitter);
-                String key = splitted[0];
+                String type = splitted[0];
+                String content = splitted[1];
+                if( !store.containsKey(type) ) {
+                    store.put(type, new ArrayList<>());
+                }
+                store.get(type).add(content);
             }
         } finally {
             it.close();
+        }
+
+        File outputFileTran = new File(Constants.fileBase + inputFileName + ".trainingSet.txt");
+        File outputFileTest = new File(Constants.fileBase + inputFileName + ".testingSet.txt");
+        for(String type : store.keySet()) {
+            List<String> one = store.get(type);
+            Collections.shuffle(one);
+            int maxCount = (int) Math.floor(one.size() * percentOfTranSet);
+            for(int i=0; i<one.size(); i++) {
+                String line = type + Constants.spllitter + one.get(i);
+                if(i < maxCount) {
+                    FileUtils.writeStringToFile(outputFileTran, line+"\n", Charset.defaultCharset(), true);
+                }else {
+                    FileUtils.writeStringToFile(outputFileTest, line+"\n", Charset.defaultCharset(), true);
+                }
+            }
         }
     }
 
