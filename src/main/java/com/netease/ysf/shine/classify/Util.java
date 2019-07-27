@@ -13,8 +13,15 @@ public class Util {
     }
 
     public static DataLine readFromFile(BufferedReader reader) throws IOException {
-        String line = reader.readLine();
-        return fromLine(line);
+        DataLine dataLine = null;
+        do {
+            String line = reader.readLine();
+            if (line == null) {
+                return null;
+            }
+            dataLine = fromLine(line);
+        } while (dataLine == null);
+        return dataLine;
     }
 
     private static DataLine fromLine(String line) {
