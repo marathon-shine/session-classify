@@ -26,9 +26,8 @@ class workerThread(threading.Thread):
 						# 清洗content
 						content = ls[-1].replace(' ','').replace('、','/').replace('!','').replace('?','').replace('～','').replace('。','')
 						# 剔除url
-						url = re.findall('https?://(?:[-\w.]|(?:%[\da-fA-F]{2}))+', content)
-						if url:
-							continue
+						urlExp = re.compile(r'https?://(?:[-\w.]|(?:%[\da-fA-F]{2}))+', re.S)
+						content = urlExp.sub("", content)
 						# 分词：精确模式
 						segs = jieba.cut(content, cut_all=False)
 						if segs:
@@ -55,18 +54,22 @@ class workerThread(threading.Thread):
 
 jieba.enable_parallel(4) # 开启并行分词模式，参数为并行进程数
 
-f = open('raw.txt', 'r') # 原始语料文件
+f = open('input.txt', 'r') # 原始语料文件
 cwd = open('output_session.txt', 'w') # cwd: chinese words digestion 分词后结果
 kw = open('output_words.txt', 'w') # 纯词库，计算词频用
  
 # 创建线程
 thread1 = workerThread(cwd, "Thread-1", f)
+thread2 = workerThread(cwd, "Thread-2", f)
+
 
 # 开启新线程
 thread1.start()
+thread2.start()
 
 # 等待所有线程完成
 thread1.join()
+thread2.join()
 print "Main Thread: Cut words finished"
 
 # 关闭文件连接
