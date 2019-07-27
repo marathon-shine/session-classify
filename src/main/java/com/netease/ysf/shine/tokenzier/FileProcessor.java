@@ -20,19 +20,35 @@ public class FileProcessor {
 //                new Pair<>("694917", "new_message_694917_parsed.txt.simple.vec.txt")
 //        );
 
-        fileStatistics("2018101112AllSession.txt");
+        fileStatistics("parsed_all_session.txt.doc2vec.tran.txt");
+    }
+
+    public static void splitTranAndTestFile(String inputFileName) throws IOException {
+        File inputFile = new File(Constants.fileBase + inputFileName );
+        LineIterator it = FileUtils.lineIterator(inputFile, "UTF-8");
+
+        int tranCounter = 0;
+        int testCounter = 0;
+        try {
+            while (it.hasNext()) {
+                String line = it.nextLine();
+                String[] splitted = line.split(Constants.spllitter);
+                String key = splitted[0];
+            }
+        } finally {
+            it.close();
+        }
     }
 
     public static void fileStatistics(String inputFileName) throws IOException {
-        String spllitter = "#####";
         File inputFile = new File(Constants.fileBase + inputFileName );
         LineIterator it = FileUtils.lineIterator(inputFile, "UTF-8");
         Map<String, Integer> counter = new HashMap<>();
         try {
             while (it.hasNext()) {
                 String line = it.nextLine();
-                if(line!=null && line.contains(spllitter)){
-                    String[] splitted = line.split(spllitter);
+                if(line!=null && line.contains(Constants.spllitter)){
+                    String[] splitted = line.split(Constants.spllitter);
                     String key = splitted[0];
                     if(!counter.containsKey(key)) {
                         counter.put(key, 0);
@@ -55,12 +71,15 @@ public class FileProcessor {
 
         });
 
+        int matchedCount = 0;
         for(Map.Entry<String,Integer> mapping:list){
-            if( mapping.getValue() > 10000 ) {
-//                System.out.println(mapping.getKey() + ":" + mapping.getValue());
-                System.out.println(mapping.getKey());
+            if( mapping.getValue() >= 10000 ) {
+                System.out.println(mapping.getKey() + ":" + mapping.getValue());
+//                System.out.println(mapping.getKey());
+                matchedCount += mapping.getValue();
             }
         }
+        System.out.println( "Mattched: " + matchedCount );
     }
 
     public static void mergeClassificationTranFile(String outputFileName, Pair<String, String>... files) throws IOException {
