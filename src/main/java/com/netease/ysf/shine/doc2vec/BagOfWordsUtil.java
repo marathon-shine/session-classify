@@ -28,18 +28,18 @@ public class BagOfWordsUtil {
         System.out.println( JSONObject.toJSONString( getVector(JiebaCutter.cutWord("给我推荐一只口红")) ) );
     }
 
-    public static Integer[] getVector(String input) throws IOException {
+    public static Double[] getVector(String input) throws IOException {
         List<String> bagOfWords = loadBagOfWords("TopKeywords.txt", vecSize, keyOffset);
-        Integer[] vec = new Integer[bagOfWords.size()];
+        Double[] vec = new Double[bagOfWords.size()];
 
         String[] content = input.split(" ");
         Set<String> contentSet = Sets.newHashSet(content);
 
         for (int i = 0; i < bagOfWords.size(); i++) {
             if( contentSet.contains( bagOfWords.get(i) ) ) {
-                vec[i] = 1;
+                vec[i] = 1D;
             }else {
-                vec[i] = 0;
+                vec[i] = 0D;
             }
         }
 
