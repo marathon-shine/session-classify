@@ -759,29 +759,31 @@ public class NaiveBayes implements OnlineClassifier<double[]>, SoftClassifier<do
         for (int i = 0; i < count; ++i) {
             Label label = new Label();
             label.label = -1;
-            label.prob = Double.MIN_VALUE;
+            label.prob = Double.NEGATIVE_INFINITY;
             topLabels.add(label);
         }
         return topLabels;
     }
 
     private int addLabel(List<Label> topLabels, double prob, int label) {
-        double minProb = Double.MIN_VALUE;
-        int index = -1;
-        for (int i = 0; i < topLabels.size(); ++i) {
+        double minProb = topLabels.get(0).prob;
+        int index = 0;
+        for (int i = 1; i < topLabels.size(); ++i) {
             Label label1 = topLabels.get(i);
             if (label1.prob <= minProb) {
                 index = i;
                 minProb = label1.prob;
             }
         }
-        if (index >= 0) {
+        if (topLabels.get(index).prob < prob) {
             Label newLabel = new Label();
             newLabel.prob = prob;
             newLabel.label = label;
             topLabels.set(index, newLabel);
+            return index;
+        } else {
+            return -1;
         }
-        return index;
     }
 
     private int[] topLabels(List<Label> labelList) {

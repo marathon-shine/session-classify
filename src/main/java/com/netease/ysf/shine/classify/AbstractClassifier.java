@@ -46,23 +46,26 @@ public abstract class AbstractClassifier implements IClassifier {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             DataLine dataLine = null;
             while ((dataLine = Util.readFromFile(reader)) != null) {
-                int index = predict(dataLine.getVector());
-                Integer category = categoryIndexCache.getCategoryOf(index);
-                if (category == null) {
-                    System.out.println("unrecognized category, index: " + index + ", origin: " + dataLine.getCategory());
-                    Statistics statistics = getOrPut(statisticsMap, dataLine.getCategory());
-                    statistics.incrFn();
-                    global.incrFn();
-                } else if (category == dataLine.getCategory()) {
-                    Statistics statistics = getOrPut(statisticsMap, category);
-                    statistics.incrTp();
-                    global.incrTp();
-                } else {
-                    Statistics statistics = getOrPut(statisticsMap, category);
-                    statistics.incrFp();
-                    statistics = getOrPut(statisticsMap, dataLine.getCategory());
-                    statistics.incrFn();
-                    global.incrFp();
+                int[] indexes = predictTop(dataLine.getVector());
+                for (int index : indexes) {
+                    System.out.println(index);
+//                    Integer category = categoryIndexCache.getCategoryOf(index);
+//                    if (category == null) {
+//                        System.out.println("unrecognized category, index: " + index + ", origin: " + dataLine.getCategory());
+//                        Statistics statistics = getOrPut(statisticsMap, dataLine.getCategory());
+//                        statistics.incrFn();
+//                        global.incrFn();
+//                    } else if (category == dataLine.getCategory()) {
+//                        Statistics statistics = getOrPut(statisticsMap, category);
+//                        statistics.incrTp();
+//                        global.incrTp();
+//                    } else {
+//                        Statistics statistics = getOrPut(statisticsMap, category);
+//                        statistics.incrFp();
+//                        statistics = getOrPut(statisticsMap, dataLine.getCategory());
+//                        statistics.incrFn();
+//                        global.incrFp();
+//                    }
                 }
             }
             statisticsMap.put(-1, global);

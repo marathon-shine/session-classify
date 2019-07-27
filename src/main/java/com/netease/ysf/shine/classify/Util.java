@@ -29,7 +29,7 @@ public class Util {
     }
 
     private static DataLine fromLine(String line) {
-        String[] splits = line.split(Constants.VECTOR_SPLITTER);
+        String[] splits = line.split(Constants.LABEL_SPLITTER);
         if (splits.length != 2) {
             return null;
         }
