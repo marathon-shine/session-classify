@@ -2,7 +2,10 @@
 # -*- coding: UTF-8 -*-
 import threading
 import jieba
-# import sys
+import re
+
+from jieba.analyse import *
+
 
 class workerThread(threading.Thread):
     def __init__(self, cwd, name, f):
@@ -19,25 +22,29 @@ class workerThread(threading.Thread):
 				if line:
 					try:
 						# 切分session
-						ls = line.strip('\n').split("###")
+						ls = line.strip('\n').split("#####")
 						# 清洗content
 						content = ls[-1].replace(' ','').replace('、','/').replace('!','').replace('?','').replace('～','').replace('。','')
+						# 剔除url
+						url = re.findall('https?://(?:[-\w.]|(?:%[\da-fA-F]{2}))+', content)
+						if url:
+							continue
 						# 分词：精确模式
 						segs = jieba.cut(content, cut_all=False)
 						if segs:
-							parse = "###".join(ls[i] for i in range(0, len(ls) - 1))
 							# 分词结果拼接回session
 							words = []
 							for seg in segs:
 								seg = seg.encode('utf-8')
 								if seg not in stopwords:
 									words.append(seg)
-							parse = parse + '###' + ' '.join(words) + '\n'
+							parse = ls[0] + '#####' + ' '.join(words) + '\n'
 
 							cwd.write(parse)
 							kw.write(' '.join(words) + '\n')
 							print self.name + ": " + parse
-					except:
+					except Exception as ee:
+						print ee
 						continue
 				else:
 					break
@@ -45,9 +52,12 @@ class workerThread(threading.Thread):
             print e
 
 
-f = open('new_message_[694917].txt', 'r') # 原始语料文件
-cwd = open('parsed_session.txt', 'w') # cwd: chinese words digestion 分词后结果
-kw = open('parsed_words.txt', 'w') # cwd: chinese words digestion 分词后结果
+
+jieba.enable_parallel(4) # 开启并行分词模式，参数为并行进程数
+
+f = open('raw.txt', 'r') # 原始语料文件
+cwd = open('output_session.txt', 'w') # cwd: chinese words digestion 分词后结果
+kw = open('output_words.txt', 'w') # 纯词库，计算词频用
  
 # 创建线程
 thread1 = workerThread(cwd, "Thread-1", f)
@@ -63,3 +73,15 @@ print "Main Thread: Cut words finished"
 f.close()
 cwd.close()
 kw.close()
+
+# 统计词频
+f = open('output_words.txt', 'r')
+data = f.read()
+
+try:
+	for keyword, weight in textrank(data, withWeight=True, topK = 100):
+		print('%s %s' % (keyword, weight))
+except Exception as e:
+	print e
+finally:
+	f.close()
