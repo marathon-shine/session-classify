@@ -96,42 +96,6 @@ public class Doc2VecUtil {
         }
     }
 
-
-    public static void fetchDoc2VecTranFile(String inputFileName, boolean withType) throws IOException {
-        int countForEachType = 5000;
-
-        String[] targetSessionType = Constants.overll10000SessionType.split(",");
-        Map<String, Integer> targetSessionTypeCounter = new HashMap<>();
-        for (int i = 0; i < targetSessionType.length; i++) {
-            targetSessionTypeCounter.put(targetSessionType[i], 0);
-        }
-
-        File inputFile = new File(Constants.fileBase + inputFileName );
-        File outputFile = new File(Constants.fileBase + System.currentTimeMillis() + inputFileName + ".doc2vec.tran.txt");
-        LineIterator it = FileUtils.lineIterator(inputFile, "UTF-8");
-
-        int index = 0;
-        try {
-            while (it.hasNext()) {
-                String line = it.nextLine();
-                String[] split = line.split(Constants.spllitter);
-                index++;
-                if(split.length > 1) {
-                    if (targetSessionTypeCounter.containsKey(split[0]) && targetSessionTypeCounter.get(split[0]) < countForEachType) {
-                        targetSessionTypeCounter.put( split[0], targetSessionTypeCounter.get(split[0]) + 1 );
-                        String content = withType ? line : split[1];
-                        FileUtils.writeStringToFile(outputFile, content+"\n", Charset.defaultCharset(), true);
-                    }
-                }
-                if( index % 1000 == 0 ) {
-                    System.out.println( "Index: " + index );
-                }
-            }
-        } finally {
-            it.close();
-        }
-    }
-
     public static void main(String[] args) throws IOException {
 //        doc2VecTraning("parsed_words.txt.simple", "doc2VecModel.bin");
 //        doc2vec( "doc2VecModel.bin", "parsed_all_session.txt.doc2vec.tran.withtype.txt");

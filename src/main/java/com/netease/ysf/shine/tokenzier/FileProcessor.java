@@ -22,7 +22,57 @@ public class FileProcessor {
 
 //        fileStatistics("parsed_all_session.txt.doc2vec.tran.txt");
 
-        splitTranAndTestFile("parsed_all_session.txt.doc2vec.tran.withtype.txt.topMeanKeyWords.bagofwords.vec.txt", 0.8d);
+        splitTranAndTestFile(
+                "parsed_all_session.withtype.txt.training.withtype.txt.TopKeywords_3000-300.bagofwords.vec.txt",
+                0.8d);
+
+//        fetchTranFile("parsed_all_session.withtype.txt", false);
+    }
+
+
+    public static void fetchTranFile(String inputFileName, boolean withType) throws IOException {
+        int countForEachType = 5000;
+
+        String[] targetSessionType = Constants.overll10000SessionType.split(",");
+        Map<String, Integer> targetSessionTypeCounter = new HashMap<>();
+        for (int i = 0; i < targetSessionType.length; i++) {
+            targetSessionTypeCounter.put(targetSessionType[i], 0);
+        }
+
+        File inputFile = new File(Constants.fileBase + inputFileName );
+        File outputFile;
+        File labelFile = null;
+        if(withType){
+            outputFile = new File(Constants.fileBase + inputFileName + ".training.withtype.txt");
+        }else {
+            outputFile = new File(Constants.fileBase + inputFileName + ".training.notype.txt");
+            labelFile = new File(Constants.fileBase + inputFileName + ".training.label.txt");
+        }
+        LineIterator it = FileUtils.lineIterator(inputFile, "UTF-8");
+
+        int index = 0;
+        try {
+            while (it.hasNext()) {
+                String line = it.nextLine();
+                String[] split = line.split(Constants.spllitter);
+                index++;
+                if(split.length > 1) {
+                    if (targetSessionTypeCounter.containsKey(split[0]) && targetSessionTypeCounter.get(split[0]) < countForEachType) {
+                        targetSessionTypeCounter.put( split[0], targetSessionTypeCounter.get(split[0]) + 1 );
+                        String content = withType ? line : split[1];
+                        FileUtils.writeStringToFile(outputFile, content+"\n", Charset.defaultCharset(), true);
+                        if(!withType){
+                            FileUtils.writeStringToFile(labelFile, split[0]+"\n", Charset.defaultCharset(), true);
+                        }
+                    }
+                }
+                if( index % 1000 == 0 ) {
+                    System.out.println( "Index: " + index );
+                }
+            }
+        } finally {
+            it.close();
+        }
     }
 
     public static void splitTranAndTestFile(String inputFileName, double percentOfTranSet) throws IOException {

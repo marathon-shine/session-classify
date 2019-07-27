@@ -14,10 +14,9 @@ import java.io.IOException;
 import java.util.Collection;
 
 public class Word2VecUtil {
-    static String inputFileName = "parsed_all_session.txt.doc2vec.tran.txt";
     static String modelFileName = "word2VecModel.bin";
 
-    public static void word2Vec() throws IOException {
+    public static void word2Vec(String inputFileName) throws IOException {
         SentenceIterator iter = new LineSentenceIterator( new File(Constants.fileBase + inputFileName ) );
 
         // Split on white spaces in the line to get words
@@ -68,7 +67,7 @@ public class Word2VecUtil {
     }
 
     public static void main(String[] args) throws IOException {
-//        word2Vec();
+//        word2Vec("parsed_all_session.withtype.txt.training.notype.txt");
         queryRelatedWords("面膜", "尺寸", "快递", "尿不湿");
     }
 

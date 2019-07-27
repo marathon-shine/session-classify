@@ -8,7 +8,7 @@ def func(a,b):
 if __name__ == '__main__':
     content = sys.argv[1]
     try:
-    	stopwords = {}.fromkeys([ line.rstrip() for line in open('/Users/wanghuan/Desktop/cut/stopword.txt') ])
+    	stopwords = {}.fromkeys([ line.rstrip() for line in open('/Users/wangqi/Git/leark/code-marathon/session-classify/src/main/python/bin/stopword.txt') ])
     except Exception as e:
     	print e
 

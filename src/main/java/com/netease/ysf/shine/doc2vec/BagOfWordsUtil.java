@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Sets;
 import com.netease.ysf.shine.Constants;
 import com.netease.ysf.shine.SortUtil;
+import com.netease.ysf.shine.tokenzier.FileProcessor;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
 
@@ -18,13 +19,13 @@ public class BagOfWordsUtil {
 //        getVecBaseWords();
 
         genBagOfWordsVec(
-                "parsed_all_session.txt.doc2vec.tran.withtype.txt",
-                loadBagOfWords("TopMeanKeywords.txt", 3000),
-                "topMeanKeyWords"
+                "parsed_all_session.withtype.txt.training.withtype.txt",
+                loadBagOfWords("TopKeywords.txt", 10000, 100),
+                "TopKeywords_10000-100"
         );
     }
 
-    public static List<String> loadBagOfWords(String input, int limit) throws IOException {
+    public static List<String> loadBagOfWords(String input, int limit, int offset) throws IOException {
         // Load TopFreqWords
         File inputFileTopFreq = new File(Constants.fileBase + input );
         LineIterator itTopFreq = FileUtils.lineIterator(inputFileTopFreq, "UTF-8");
@@ -45,7 +46,7 @@ public class BagOfWordsUtil {
         } finally {
             itTopFreq.close();
         }
-        List<String> result = bagOfWords.subList(bagOfWords.size()-limit, bagOfWords.size());
+        List<String> result = bagOfWords.subList(bagOfWords.size()-limit-offset, bagOfWords.size()-offset);
         return result;
     }
 

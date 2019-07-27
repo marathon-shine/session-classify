@@ -1,18 +1,18 @@
-package com.netease.ysf.shine;
+package com.netease.ysf.shine.tokenzier;
 
 import java.io.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Cutter {
+public class JiebaCutter {
 
     /**
      * 修改python脚本路径，必须为绝对路径
      */
-    private static final String path = "/Users/wanghuan/Desktop/cut/main.py";
+    private static final String path = "/Users/wangqi/Git/leark/code-marathon/session-classify/src/main/python/bin/main.py";
 
     public static void main(String[] args) {
-        System.out.println(cutWord("南京市长江大桥"));
+        System.out.println(cutWord("麻烦帮我推荐一款口红"));
     }
 
     public static String cutWord(String content) {

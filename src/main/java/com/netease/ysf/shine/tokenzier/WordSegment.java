@@ -175,8 +175,8 @@ public class WordSegment {
 
     public static void main(String[] args) throws IOException {
 //        wordSegment();
-//        wordStatistics("parsed_all_session.txt.doc2vec.tran.txt");
-//        keyWordsStatics("parsed_all_session.txt.doc2vec.tran.txt");
-        typedKeywordsStatics("parsed_all_session.txt.doc2vec.tran.withtype.txt", "TypedTopKeyWords.txt");
+//        wordStatistics("parsed_all_session.notype.txt");
+        keyWordsStatics("parsed_all_session.notype.txt");
+//        typedKeywordsStatics("parsed_all_session.txt.doc2vec.tran.withtype.txt", "TypedTopKeyWords.txt");
     }
 }
