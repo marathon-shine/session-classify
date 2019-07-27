@@ -4,8 +4,6 @@
 
 - jieba 分词: 
 
-安装： 
-
 ``` python
 pip install jieba
 
