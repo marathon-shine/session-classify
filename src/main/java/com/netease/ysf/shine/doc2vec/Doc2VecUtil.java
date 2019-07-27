@@ -6,7 +6,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
 import org.deeplearning4j.models.paragraphvectors.ParagraphVectors;
-import org.deeplearning4j.models.word2vec.Word2Vec;
 import org.deeplearning4j.text.sentenceiterator.LineSentenceIterator;
 import org.deeplearning4j.text.sentenceiterator.SentenceIterator;
 import org.deeplearning4j.text.tokenization.tokenizer.preprocessor.CommonPreprocessor;
@@ -16,6 +15,8 @@ import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class Doc2VecUtil {
@@ -46,7 +47,7 @@ public class Doc2VecUtil {
 //        doc2vec( paragraphVectors, "new_message_694916_parsed.txt.simple", "new_message_694917_parsed.txt.simple");
     }
 
-    public static void test() throws IOException {
+    public static void loadModelAndGetVec() throws IOException {
         TokenizerFactory tokenizerFactory = new DefaultTokenizerFactory();
         tokenizerFactory.setTokenPreProcessor(new CommonPreprocessor());
 
@@ -83,12 +84,47 @@ public class Doc2VecUtil {
                 it.close();
             }
         }
+    }
 
+
+    public static void fetchDoc2VecTranFile(String inputFileName) throws IOException {
+        int countForEachType = 10000;
+
+        String[] targetSessionType = Constants.overll10000SessionType.split(",");
+        Map<String, Integer> targetSessionTypeCounter = new HashMap<>();
+        for (int i = 0; i < targetSessionType.length; i++) {
+            targetSessionTypeCounter.put(targetSessionType[i], 0);
+        }
+
+        File inputFile = new File(Constants.fileBase + inputFileName );
+        File outputFile = new File(Constants.fileBase + inputFileName + ".doc2vec.tran.txt");
+        LineIterator it = FileUtils.lineIterator(inputFile, "UTF-8");
+
+        int index = 0;
+        try {
+            while (it.hasNext()) {
+                String line = it.nextLine();
+                String[] split = line.split(Constants.spllitter);
+                index++;
+                if(split.length > 1) {
+                    if (targetSessionTypeCounter.containsKey(split[0]) && targetSessionTypeCounter.get(split[0]) < countForEachType) {
+                        targetSessionTypeCounter.put( split[0], targetSessionTypeCounter.get(split[0]) + 1 );
+                        FileUtils.writeStringToFile(outputFile, split[1]+"\n", Charset.defaultCharset(), true);
+                    }
+                }
+                if( index % 1000 == 0 ) {
+                    System.out.println( "Index: " + index );
+                }
+            }
+        } finally {
+            it.close();
+        }
     }
 
     public static void main(String[] args) throws IOException {
 //        doc2VecTraning("parsed_words.txt.simple", "doc2VecModel.bin");
-        doc2vec( "doc2VecModel.bin", "new_message_694916_parsed.txt.simple", "new_message_694917_parsed.txt.simple");
-//        test();
+//        doc2vec( "doc2VecModel.bin", "new_message_694916_parsed.txt.simple", "new_message_694917_parsed.txt.simple");
+//        loadModelAndGetVec();
+        fetchDoc2VecTranFile( "parsed_all_session.txt" );
     }
 }
