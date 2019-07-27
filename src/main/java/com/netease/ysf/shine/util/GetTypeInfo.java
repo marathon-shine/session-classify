@@ -3,6 +3,7 @@ package com.netease.ysf.shine.util;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class GetTypeInfo {
     static String typeMap =
@@ -68,6 +69,16 @@ public class GetTypeInfo {
             "3977051\t预付定金规则\n";
 
     public static String getTypeInfo(String input) throws IOException {
+
+        String desc = getCoreMap().get(input);
+        return desc == null ? "未分类" : desc;
+    }
+
+    public static Set<String> typeSet() {
+        return getCoreMap().keySet();
+    }
+
+    private static Map<String, String> getCoreMap() {
         String[] typeMapSplit = typeMap.split("\n");
         Map<String, String> map = new HashMap<>();
         for (int i = 0; i < typeMapSplit.length; i++) {
@@ -79,8 +90,7 @@ public class GetTypeInfo {
                 // Ignore
             }
         }
-        String desc = map.get(input);
-        return desc == null ? "未分类" : desc;
+        return map;
     }
 
     public static void main(String[] args) throws IOException {

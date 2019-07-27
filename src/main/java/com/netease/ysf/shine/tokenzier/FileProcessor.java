@@ -1,6 +1,7 @@
 package com.netease.ysf.shine.tokenzier;
 
 import com.netease.ysf.shine.util.Constants;
+import com.netease.ysf.shine.util.GetTypeInfo;
 import javafx.util.Pair;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
@@ -28,7 +29,6 @@ public class FileProcessor {
 
 //        fetchTranFile("parsed_all_session.withtype.txt", false);
     }
-
 
     public static void fetchTranFile(String inputFileName, boolean withType) throws IOException {
         int countForEachType = 5000;

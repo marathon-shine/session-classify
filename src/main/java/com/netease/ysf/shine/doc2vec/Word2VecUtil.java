@@ -53,12 +53,17 @@ public class Word2VecUtil {
         System.out.println(cosSim + "---" + cosSim2);
     }
 
-    public static void queryRelatedWords(String... input) {
-        /*
-         * Let's assume that some time passed, and now we have new corpus to be used to weights update.
-         * Instead of building new model over joint corpus, we can use weights update mode.
-         */
+    public static Word2Vec loadModel() {
         Word2Vec word2Vec = WordVectorSerializer.readWord2VecModel(Constants.fileBase + modelFileName);
+        return word2Vec;
+    }
+
+    public static double calcuateSimilarity( Word2Vec word2Vec, String input, String input2 ) {
+        double cosSim = word2Vec.similarity(input, input2);
+        return cosSim;
+    }
+
+    public static void queryRelatedWords(Word2Vec word2Vec, String... input) {
 
         for(int i=0; i<input.length; i++) {
             Collection<String> lst = word2Vec.wordsNearest(input[i], 20);
@@ -68,7 +73,7 @@ public class Word2VecUtil {
 
     public static void main(String[] args) throws IOException {
 //        word2Vec("parsed_all_session.withtype.txt.training.notype.txt");
-        queryRelatedWords("面膜", "尺寸", "快递", "尿不湿");
+        queryRelatedWords(loadModel(),"面膜", "尺寸", "快递", "尿不湿");
     }
 
 }

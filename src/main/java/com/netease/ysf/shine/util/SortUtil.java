@@ -13,4 +13,12 @@ public class SortUtil {
         return list;
     }
 
+    public static List<Map.Entry<String,Double>> sortDoubleMap(Map<String, Double> wordCount) {
+        //这里将map.entrySet()转换成list
+        List<Map.Entry<String,Double>> list = new ArrayList<>(wordCount.entrySet());
+        //然后通过比较器来实现排序
+        //升序排序
+        Collections.sort(list, Comparator.comparing(Map.Entry::getValue));
+        return list;
+    }
 }
