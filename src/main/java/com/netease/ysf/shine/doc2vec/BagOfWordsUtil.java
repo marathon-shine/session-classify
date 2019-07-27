@@ -2,6 +2,7 @@ package com.netease.ysf.shine.doc2vec;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Sets;
+import com.netease.ysf.shine.tokenzier.JiebaCutter;
 import com.netease.ysf.shine.util.Constants;
 import com.netease.ysf.shine.util.SortUtil;
 import org.apache.commons.io.FileUtils;
@@ -13,15 +14,36 @@ import java.nio.charset.Charset;
 import java.util.*;
 
 public class BagOfWordsUtil {
+    public static final int vecSize = 5000;
+    public static final int keyOffset = 0;
 
     public static void main(String[] args) throws IOException {
 //        getVecBaseWords();
 
-        genBagOfWordsVec(
-                "parsed_all_session.withtype.txt.training.withtype.txt",
-                loadBagOfWords("TopKeywords.txt", 10000, 100),
-                "TopKeywords_10000-100"
-        );
+//        genBagOfWordsVec(
+//                "parsed_all_session.withtype.txt.training.withtype.txt",
+//                loadBagOfWords("TopKeywords.txt", vecSize, keyOffset),
+//                "TopKeywords_" + vecSize + "-" + 0
+//        );
+        System.out.println( JSONObject.toJSONString( getVector(JiebaCutter.cutWord("给我推荐一只口红")) ) );
+    }
+
+    public static Integer[] getVector(String input) throws IOException {
+        List<String> bagOfWords = loadBagOfWords("TopKeywords.txt", vecSize, keyOffset);
+        Integer[] vec = new Integer[bagOfWords.size()];
+
+        String[] content = input.split(" ");
+        Set<String> contentSet = Sets.newHashSet(content);
+
+        for (int i = 0; i < bagOfWords.size(); i++) {
+            if( contentSet.contains( bagOfWords.get(i) ) ) {
+                vec[i] = 1;
+            }else {
+                vec[i] = 0;
+            }
+        }
+
+        return vec;
     }
 
     public static List<String> loadBagOfWords(String input, int limit, int offset) throws IOException {
