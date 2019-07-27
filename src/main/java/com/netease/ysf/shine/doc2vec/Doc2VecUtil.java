@@ -69,15 +69,19 @@ public class Doc2VecUtil {
             File outputFile = new File(Constants.fileBase + oneFile + ".vec.txt");
             LineIterator it = FileUtils.lineIterator(inputFile, "UTF-8");
             try {
+                int index = 0;
                 while (it.hasNext()) {
+                    index++;
                     String line = it.nextLine();
-                    System.out.println(line);
                     try {
-                        double[] vec = paragraphVectors.inferVector(line).toDoubleVector();
-                        System.out.println(JSONObject.toJSONString(vec));
-                        FileUtils.writeStringToFile(outputFile, JSONObject.toJSONString(vec)+"\n", Charset.defaultCharset(), true);
+                        String[] split = line.split(Constants.spllitter);
+                        double[] vec = paragraphVectors.inferVector(split[1]).toDoubleVector();
+                        FileUtils.writeStringToFile(outputFile, split[0] + Constants.spllitter + JSONObject.toJSONString(vec)+"\n", Charset.defaultCharset(), true);
                     } catch (Exception e) {
-                        System.out.println("----------------------------------");
+                        // Ignore
+                    }
+                    if(index%10 == 0) {
+                      System.out.println("Index:" + index);
                     }
                 }
             } finally {
@@ -87,8 +91,8 @@ public class Doc2VecUtil {
     }
 
 
-    public static void fetchDoc2VecTranFile(String inputFileName) throws IOException {
-        int countForEachType = 10000;
+    public static void fetchDoc2VecTranFile(String inputFileName, boolean withType) throws IOException {
+        int countForEachType = 5000;
 
         String[] targetSessionType = Constants.overll10000SessionType.split(",");
         Map<String, Integer> targetSessionTypeCounter = new HashMap<>();
@@ -97,7 +101,7 @@ public class Doc2VecUtil {
         }
 
         File inputFile = new File(Constants.fileBase + inputFileName );
-        File outputFile = new File(Constants.fileBase + inputFileName + ".doc2vec.tran.txt");
+        File outputFile = new File(Constants.fileBase + System.currentTimeMillis() + inputFileName + ".doc2vec.tran.txt");
         LineIterator it = FileUtils.lineIterator(inputFile, "UTF-8");
 
         int index = 0;
@@ -109,7 +113,8 @@ public class Doc2VecUtil {
                 if(split.length > 1) {
                     if (targetSessionTypeCounter.containsKey(split[0]) && targetSessionTypeCounter.get(split[0]) < countForEachType) {
                         targetSessionTypeCounter.put( split[0], targetSessionTypeCounter.get(split[0]) + 1 );
-                        FileUtils.writeStringToFile(outputFile, split[1]+"\n", Charset.defaultCharset(), true);
+                        String content = withType ? line : split[1];
+                        FileUtils.writeStringToFile(outputFile, content+"\n", Charset.defaultCharset(), true);
                     }
                 }
                 if( index % 1000 == 0 ) {
@@ -123,8 +128,8 @@ public class Doc2VecUtil {
 
     public static void main(String[] args) throws IOException {
 //        doc2VecTraning("parsed_words.txt.simple", "doc2VecModel.bin");
-//        doc2vec( "doc2VecModel.bin", "new_message_694916_parsed.txt.simple", "new_message_694917_parsed.txt.simple");
+        doc2vec( "doc2VecModel.bin", "parsed_all_session.txt.doc2vec.tran.withtype.txt");
 //        loadModelAndGetVec();
-        fetchDoc2VecTranFile( "parsed_all_session.txt" );
+//        fetchDoc2VecTranFile( "parsed_all_session.txt", true );
     }
 }
