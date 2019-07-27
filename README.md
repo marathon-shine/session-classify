@@ -11,8 +11,7 @@
 简易安装方法，使用pip安装jieba分词
 
 ``` python
-pip install jieba --user
-
+pip install jieba
 ```
 
 
