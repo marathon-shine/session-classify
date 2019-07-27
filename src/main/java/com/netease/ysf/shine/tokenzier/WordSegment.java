@@ -2,8 +2,8 @@ package com.netease.ysf.shine.tokenzier;
 
 import com.alibaba.fastjson.JSON;
 import com.hankcs.hanlp.HanLP;
-import com.netease.ysf.shine.Constants;
-import com.netease.ysf.shine.SortUtil;
+import com.netease.ysf.shine.util.Constants;
+import com.netease.ysf.shine.util.SortUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
 import java.io.File;

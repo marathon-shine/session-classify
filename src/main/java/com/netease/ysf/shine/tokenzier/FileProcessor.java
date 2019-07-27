@@ -1,6 +1,6 @@
 package com.netease.ysf.shine.tokenzier;
 
-import com.netease.ysf.shine.Constants;
+import com.netease.ysf.shine.util.Constants;
 import javafx.util.Pair;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;

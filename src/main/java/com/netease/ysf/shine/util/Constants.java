@@ -1,4 +1,4 @@
-package com.netease.ysf.shine;
+package com.netease.ysf.shine.util;
 
 public class Constants {
     public static String spllitter = "#####";

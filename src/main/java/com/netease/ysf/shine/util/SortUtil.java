@@ -1,4 +1,4 @@
-package com.netease.ysf.shine;
+package com.netease.ysf.shine.util;
 
 import java.util.*;
 

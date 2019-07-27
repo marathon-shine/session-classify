@@ -1,7 +1,7 @@
 package com.netease.ysf.shine.doc2vec;
 
 import com.alibaba.fastjson.JSONObject;
-import com.netease.ysf.shine.Constants;
+import com.netease.ysf.shine.util.Constants;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
@@ -16,8 +16,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class Doc2VecUtil {

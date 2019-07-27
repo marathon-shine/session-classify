@@ -1,6 +1,6 @@
 package com.netease.ysf.shine.doc2vec;
 
-import com.netease.ysf.shine.Constants;
+import com.netease.ysf.shine.util.Constants;
 import org.deeplearning4j.iterator.CnnSentenceDataSetIterator;
 import org.deeplearning4j.iterator.LabeledSentenceProvider;
 import org.deeplearning4j.iterator.provider.CollectionLabeledSentenceProvider;

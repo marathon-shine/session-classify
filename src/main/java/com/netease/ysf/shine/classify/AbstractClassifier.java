@@ -1,6 +1,6 @@
 package com.netease.ysf.shine.classify;
 
-import com.netease.ysf.shine.CategoryIndexCache;
+import com.netease.ysf.shine.util.CategoryIndexCache;
 
 import java.io.*;
 import java.util.*;

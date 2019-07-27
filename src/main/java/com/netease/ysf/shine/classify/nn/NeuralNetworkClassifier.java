@@ -1,6 +1,6 @@
 package com.netease.ysf.shine.classify.nn;
 
-import com.netease.ysf.shine.Constants;
+import com.netease.ysf.shine.util.Constants;
 import com.netease.ysf.shine.classify.AbstractClassifier;
 import smile.classification.NeuralNetwork;
 

@@ -2,9 +2,8 @@ package com.netease.ysf.shine.doc2vec;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Sets;
-import com.netease.ysf.shine.Constants;
-import com.netease.ysf.shine.SortUtil;
-import com.netease.ysf.shine.tokenzier.FileProcessor;
+import com.netease.ysf.shine.util.Constants;
+import com.netease.ysf.shine.util.SortUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
 

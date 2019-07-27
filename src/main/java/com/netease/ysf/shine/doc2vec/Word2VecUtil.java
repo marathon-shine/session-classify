@@ -1,6 +1,6 @@
 package com.netease.ysf.shine.doc2vec;
 
-import com.netease.ysf.shine.Constants;
+import com.netease.ysf.shine.util.Constants;
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
 import org.deeplearning4j.models.word2vec.Word2Vec;
 import org.deeplearning4j.text.sentenceiterator.LineSentenceIterator;
