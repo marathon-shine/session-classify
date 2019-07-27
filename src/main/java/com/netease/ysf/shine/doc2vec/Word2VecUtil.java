@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.Collection;
 
 public class Word2VecUtil {
-    static String inputFileName = "segmentOut.txt";
+    static String inputFileName = "parsed_all_session.txt.doc2vec.tran.txt";
     static String modelFileName = "word2VecModel.bin";
 
     public static void word2Vec() throws IOException {
@@ -24,7 +24,7 @@ public class Word2VecUtil {
         TokenizerFactory t = new DefaultTokenizerFactory();
         t.setTokenPreProcessor(new CommonPreprocessor());
 
-        Word2Vec vec = new Word2Vec.Builder()
+        Word2Vec vec1 = new Word2Vec.Builder()
                 .minWordFrequency(5)
                 .layerSize(100)
                 .seed(42)
@@ -32,13 +32,13 @@ public class Word2VecUtil {
                 .iterate(iter)
                 .tokenizerFactory(t)
                 .build();
-        vec.fit();
+        vec1.fit();
 
 
         /*
          * at this moment we're supposed to have model built, and it can be saved for future use.
          */
-        WordVectorSerializer.writeWord2VecModel(vec, Constants.fileBase + modelFileName);
+        WordVectorSerializer.writeWord2VecModel(vec1, Constants.fileBase + modelFileName);
         /*
          * Let's assume that some time passed, and now we have new corpus to be used to weights update.
          * Instead of building new model over joint corpus, we can use weights update mode.
@@ -46,16 +46,30 @@ public class Word2VecUtil {
         Word2Vec word2Vec = WordVectorSerializer.readWord2VecModel(Constants.fileBase + modelFileName);
 
 
-        Collection<String> lst = vec.wordsNearest("面膜", 10);
+        Collection<String> lst = word2Vec.wordsNearest("面膜", 10);
         System.out.println(lst);
 
-        double cosSim = vec.similarity("面膜", "眼霜");
-        double cosSim2 = vec.similarity("面膜", "快递");
+        double cosSim = word2Vec.similarity("面膜", "眼霜");
+        double cosSim2 = word2Vec.similarity("面膜", "快递");
         System.out.println(cosSim + "---" + cosSim2);
     }
 
+    public static void queryRelatedWords(String... input) {
+        /*
+         * Let's assume that some time passed, and now we have new corpus to be used to weights update.
+         * Instead of building new model over joint corpus, we can use weights update mode.
+         */
+        Word2Vec word2Vec = WordVectorSerializer.readWord2VecModel(Constants.fileBase + modelFileName);
+
+        for(int i=0; i<input.length; i++) {
+            Collection<String> lst = word2Vec.wordsNearest(input[i], 20);
+            System.out.println("Related to: " + input[i] + " -> " + lst);
+        }
+    }
+
     public static void main(String[] args) throws IOException {
-        word2Vec();
+//        word2Vec();
+        queryRelatedWords("面膜", "尺寸", "快递", "尿不湿");
     }
 
 }

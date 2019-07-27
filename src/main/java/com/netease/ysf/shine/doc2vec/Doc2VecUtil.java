@@ -15,6 +15,7 @@ import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,14 +48,19 @@ public class Doc2VecUtil {
 //        doc2vec( paragraphVectors, "new_message_694916_parsed.txt.simple", "new_message_694917_parsed.txt.simple");
     }
 
-    public static void loadModelAndGetVec() throws IOException {
+    public static void loadModelAndGet( String... input ) throws IOException {
         TokenizerFactory tokenizerFactory = new DefaultTokenizerFactory();
         tokenizerFactory.setTokenPreProcessor(new CommonPreprocessor());
-
         ParagraphVectors paragraphVectors = WordVectorSerializer.readParagraphVectors(Constants.fileBase + "doc2VecModel.bin");
         paragraphVectors.setTokenizerFactory(tokenizerFactory);
-        double[] vec = paragraphVectors.inferVector("尺码 北 挽 帮到 麻烦 查询 平时 运动鞋 41 请稍等 查询 请 耐心 等待 选大 一码 脚长 好像 255 260 帮 尺码 表 40.5 退亲 这款 支持 天无 理由 退货 41 页面 卖 4140.5").toDoubleVector();
-        System.out.println(JSONObject.toJSONString(vec));
+
+        for(int i=0; i<input.length; i++) {
+            Collection<String> labels = paragraphVectors.nearestLabels(input[i], 10);
+            Collection<String> wards = paragraphVectors.wordsNearest(input[i], 10);
+            System.out.println("Related to: " + input[i] + " -> labels: " + JSONObject.toJSONString(labels));
+            System.out.println("Related to: " + input[i] + " -> wards: " + JSONObject.toJSONString(wards));
+        }
+
     }
 
     public static void doc2vec(String modelFileName, String... inputfiles) throws IOException {
@@ -128,8 +134,9 @@ public class Doc2VecUtil {
 
     public static void main(String[] args) throws IOException {
 //        doc2VecTraning("parsed_words.txt.simple", "doc2VecModel.bin");
-        doc2vec( "doc2VecModel.bin", "parsed_all_session.txt.doc2vec.tran.withtype.txt");
+//        doc2vec( "doc2VecModel.bin", "parsed_all_session.txt.doc2vec.tran.withtype.txt");
 //        loadModelAndGetVec();
 //        fetchDoc2VecTranFile( "parsed_all_session.txt", true );
+        loadModelAndGet("眼霜");
     }
 }

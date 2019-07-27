@@ -16,15 +16,15 @@ public class BagOfWordsUtil {
 
     public static void main(String[] args) throws IOException {
 //        getVecBaseWords();
+
         genBagOfWordsVec(
                 "parsed_all_session.txt.doc2vec.tran.withtype.txt",
-                loadBagOfWords("TopKeyWords.txt", 2000),
-                "topKeyword"
+                loadBagOfWords("TopMeanKeywords.txt", 3000),
+                "topMeanKeyWords"
         );
     }
 
     public static List<String> loadBagOfWords(String input, int limit) throws IOException {
-//        String bagOfWordsMeta = "BagOfWordsMeta.txt";
         // Load TopFreqWords
         File inputFileTopFreq = new File(Constants.fileBase + input );
         LineIterator itTopFreq = FileUtils.lineIterator(inputFileTopFreq, "UTF-8");
@@ -95,8 +95,8 @@ public class BagOfWordsUtil {
         String topKeyWordsFileName = "TopKeyWords.txt";
         String topTypedKeyWordsFileName = "TypedTopKeyWords.txt";
         // 出现在多少个分类中的词，认为是表意能力不够强的
-        int excludeThreshold = 10;
-        int topKeyMinCount = 8;
+        int excludeThreshold = 40;
+        int topKeyMinCount = 5;
         int topFreqMinCount = 10;
 
         // Load TopFreqWords

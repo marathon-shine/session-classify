@@ -22,7 +22,7 @@ public class FileProcessor {
 
 //        fileStatistics("parsed_all_session.txt.doc2vec.tran.txt");
 
-        splitTranAndTestFile("parsed_all_session.txt.doc2vec.tran.withtype.txt.topKeyword.bagofwords.vec.txt", 0.8d);
+        splitTranAndTestFile("parsed_all_session.txt.doc2vec.tran.withtype.txt.topMeanKeyWords.bagofwords.vec.txt", 0.8d);
     }
 
     public static void splitTranAndTestFile(String inputFileName, double percentOfTranSet) throws IOException {
