@@ -7,4 +7,11 @@ public class Constants {
 
     public static final int CATEGORY_AMOUNT = 50;
     public static final int DIMENSION = 5000;
+
+    /*******CHI是算法******/
+    public static final String CHI_FILE_PATH = "E:\\work\\temp\\marathon\\";
+
+    public static final String LABEL_SPLITTER = "#####";
+    public static final String WORD_SPLITTER = " ";
+    public static final String VECTOR_SPLITTER = ":";
 }

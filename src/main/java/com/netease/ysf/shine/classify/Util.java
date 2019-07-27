@@ -1,6 +1,9 @@
 package com.netease.ysf.shine.classify;
 
-import java.io.*;
+import com.netease.ysf.shine.util.Constants;
+
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.Map;
 
 public class Util {
@@ -26,7 +29,7 @@ public class Util {
     }
 
     private static DataLine fromLine(String line) {
-        String[] splits = line.split("#####");
+        String[] splits = line.split(Constants.VECTOR_SPLITTER);
         if (splits.length != 2) {
             return null;
         }
