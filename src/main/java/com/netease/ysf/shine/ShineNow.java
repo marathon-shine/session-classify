@@ -33,14 +33,17 @@ public class ShineNow {
         System.out.println(" >>>>>> 输入一大段话");
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String text = br.readLine();
-        if (text.length() > 0) {
-            // 分词
-            String cutted = JiebaCutter.cutWord(text);
-            // 词袋
-            double[] vector = BagOfWordsUtil.getVector(cutted);
-            // 分类
-            int category = bayesClassifier.getCategory(vector);
-            System.out.println("分类是：" + GetTypeInfo.getTypeInfo(String.valueOf(category)));
+        // 分词
+        String cutted = JiebaCutter.cutWord(text);
+        // 词袋
+        double[] vector = BagOfWordsUtil.getVector(cutted);
+        // 分类
+        int[] indexes = bayesClassifier.predictTop(vector);
+        System.out.println("分类可能是：");
+        for (int index : indexes) {
+            int category = bayesClassifier.getCategory(index);
+            System.out.print(GetTypeInfo.getTypeInfo(String.valueOf(category)));
+            System.out.print(" / ");
         }
     }
     private void loadClassifier(String modelFile) throws IOException, ClassNotFoundException {

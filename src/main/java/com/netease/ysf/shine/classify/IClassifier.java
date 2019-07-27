@@ -6,4 +6,7 @@ public interface IClassifier {
 
     int predict(double[] vector);
 
+    default int[] predictTop(double[] vector) {
+        return null;
+    }
 }

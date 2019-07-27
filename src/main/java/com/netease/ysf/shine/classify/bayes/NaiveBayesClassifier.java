@@ -2,7 +2,6 @@ package com.netease.ysf.shine.classify.bayes;
 
 import com.netease.ysf.shine.classify.AbstractClassifier;
 import com.netease.ysf.shine.util.Constants;
-import smile.classification.NaiveBayes;
 
 import java.io.IOException;
 
@@ -29,6 +28,11 @@ public class NaiveBayesClassifier extends AbstractClassifier {
     @Override
     public int predict(double[] vector) {
         return bayes.predict(vector);
+    }
+
+    @Override
+    public int[] predictTop(double[] vector) {
+        return bayes.predictTop(vector);
     }
 
     public void saveModel(String modelFile) {

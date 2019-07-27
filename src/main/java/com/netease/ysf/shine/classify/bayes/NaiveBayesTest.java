@@ -3,6 +3,7 @@ package com.netease.ysf.shine.classify.bayes;
 import com.netease.ysf.shine.classify.Util;
 
 import java.io.File;
+import java.io.IOException;
 
 public class NaiveBayesTest {
 
@@ -11,10 +12,10 @@ public class NaiveBayesTest {
 
     private static final String MODEL_FILE = "/work/marathon/model_bayes.bin";
 
-    public static void main(String[] args) {
-        NaiveBayesClassifier classifier = new NaiveBayesClassifier();
-        classifier.learn(new File(TRAIN_FILE));
-        classifier.saveModel(MODEL_FILE);
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
+        NaiveBayesClassifier classifier = new NaiveBayesClassifier(MODEL_FILE);
+//        classifier.learn(new File(TRAIN_FILE));
+//        classifier.saveModel(MODEL_FILE);
         Util.printStatistics(classifier.predict(new File(TEST_FILE)));
     }
 }

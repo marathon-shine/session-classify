@@ -29,6 +29,11 @@ public abstract class AbstractClassifier implements IClassifier {
         return category == null ? -1 : category;
     }
 
+    public int getCategory(int index) {
+        Integer category = categoryIndexCache.getCategoryOf(index);
+        return category == null ? -1 : category;
+    }
+
     private void printProgress(int progress, int total) {
         if (progress % 500  == 0) {
             System.out.println("progress: " + progress + " / " + total);
