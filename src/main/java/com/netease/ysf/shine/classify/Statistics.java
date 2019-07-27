@@ -33,6 +33,9 @@ public class Statistics {
 
         return "召回率：" + (recallRate * 100) + "% \n"
                 + "精确率：" + (preciousRate * 100) + "% \n"
-                + "准确率：" + (accuracyRate * 100) + "% \n";
+                + "准确率：" + (accuracyRate * 100) + "% \n"
+                + "tp: " + tp + "\n"
+                + "fp: " + fp + "\n"
+                + "fn: " + fn + "\n";
     }
 }

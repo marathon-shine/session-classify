@@ -5,6 +5,7 @@ import java.util.Map;
 
 public class Util {
 
+    private static final double BASE = 0;
     public static void printStatistics(Map<Integer, Statistics> statisticsMap) {
         for (Map.Entry<Integer, Statistics> entrySet : statisticsMap.entrySet()) {
             System.out.println("--------category: " + entrySet.getKey() + "-----------");
@@ -25,7 +26,7 @@ public class Util {
     }
 
     private static DataLine fromLine(String line) {
-        String[] splits = line.split(":");
+        String[] splits = line.split("#####");
         if (splits.length != 2) {
             return null;
         }
@@ -33,7 +34,7 @@ public class Util {
         String[] vectorStrs = splits[1].substring(1, splits[1].length() - 1).split(",");
         double[] vector = new double[vectorStrs.length];
         for (int i = 0; i < vector.length; ++i) {
-            vector[i] = Double.parseDouble(vectorStrs[i]);
+            vector[i] = Double.parseDouble(vectorStrs[i]) + BASE;
         }
 
         DataLine dataLine = new DataLine();
@@ -41,4 +42,21 @@ public class Util {
         dataLine.setVector(vector);
         return dataLine;
     }
+
+//    private static DataLine fromLine(String line) {
+//        String[] splits = line.split("\t");
+//        if (splits.length != 3) {
+//            return null;
+//        }
+//        int category = Integer.parseInt(splits[0]);
+//        double[] vector = new double[splits.length - 1];
+//        for (int i = 0; i < vector.length; ++i) {
+//            vector[i] = Double.parseDouble(splits[i + 1].trim()) + BASE;
+//        }
+//
+//        DataLine dataLine = new DataLine();
+//        dataLine.setCategory(category);
+//        dataLine.setVector(vector);
+//        return dataLine;
+//    }
 }

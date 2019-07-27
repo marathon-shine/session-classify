@@ -1,14 +1,15 @@
 package com.netease.ysf.shine.classify.bayes;
 
+import com.netease.ysf.shine.Constants;
 import com.netease.ysf.shine.classify.AbstractClassifier;
 import smile.classification.NaiveBayes;
 
 public class NaiveBayesClassifier extends AbstractClassifier {
 
-    private static final int CLASS_AMOUNT= 2;
-    private static final int DIMENSION = 100;
+    private static final int CATEGORY_AMOUNT = Constants.CATEGORY_AMOUNT;
+    private static final int DIMENSION = Constants.DIMENSION;
 
-   private NaiveBayes bayes = new NaiveBayes(NaiveBayes.Model.MULTINOMIAL, CLASS_AMOUNT, DIMENSION);
+   private NaiveBayes bayes = new NaiveBayes(NaiveBayes.Model.MULTINOMIAL, CATEGORY_AMOUNT, DIMENSION);
 
     @Override
     public void learn(double[] vector, int category) {

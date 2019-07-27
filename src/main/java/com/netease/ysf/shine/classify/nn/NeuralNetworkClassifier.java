@@ -1,12 +1,17 @@
 package com.netease.ysf.shine.classify.nn;
 
+import com.netease.ysf.shine.Constants;
 import com.netease.ysf.shine.classify.AbstractClassifier;
 import smile.classification.NeuralNetwork;
 
 public class NeuralNetworkClassifier extends AbstractClassifier {
 
-    NeuralNetwork neuralNetwork = new NeuralNetwork(NeuralNetwork.ErrorFunction.LEAST_MEAN_SQUARES, 3,4,5,4,3);
+    private NeuralNetwork neuralNetwork;
 
+    public NeuralNetworkClassifier() {
+        int[] numUnits = {Constants.DIMENSION, Constants.DIMENSION, Constants.CATEGORY_AMOUNT};
+        neuralNetwork = new NeuralNetwork(NeuralNetwork.ErrorFunction.CROSS_ENTROPY, numUnits);
+    }
     @Override
     public void learn(double[] vector, int category) {
         neuralNetwork.learn(vector, category);

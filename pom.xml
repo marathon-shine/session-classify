@@ -104,6 +104,19 @@
             <artifactId>lombok</artifactId>
             <version>1.18.8</version>
         </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.datavec/datavec-api -->
+        <dependency>
+            <groupId>org.datavec</groupId>
+            <artifactId>datavec-api</artifactId>
+            <version>1.0.0-beta4</version>
+        </dependency>
+
     </dependencies>
 
 </project>
