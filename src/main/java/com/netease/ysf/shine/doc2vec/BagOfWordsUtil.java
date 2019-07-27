@@ -28,9 +28,9 @@ public class BagOfWordsUtil {
         System.out.println( JSONObject.toJSONString( getVector(JiebaCutter.cutWord("给我推荐一只口红")) ) );
     }
 
-    public static Double[] getVector(String input) throws IOException {
+    public static double[] getVector(String input) throws IOException {
         List<String> bagOfWords = loadBagOfWords("TopKeywords.txt", vecSize, keyOffset);
-        Double[] vec = new Double[bagOfWords.size()];
+        double[] vec = new double[bagOfWords.size()];
 
         String[] content = input.split(" ");
         Set<String> contentSet = Sets.newHashSet(content);

@@ -1,9 +1,10 @@
 package com.netease.ysf.shine.util;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CategoryIndexCache {
+public class CategoryIndexCache implements Serializable {
 
     private Map<Integer, Integer> categoryIndexMap = new HashMap<>();
     private Map<Integer, Integer> indexCategoryMap = new HashMap<>();

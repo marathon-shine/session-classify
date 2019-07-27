@@ -21,4 +21,8 @@ public class NeuralNetworkClassifier extends AbstractClassifier {
     public int predict(double[] vector) {
         return neuralNetwork.predict(vector);
     }
+
+    public void saveModel(String file) {
+        super.saveModel(file, neuralNetwork);
+    }
 }

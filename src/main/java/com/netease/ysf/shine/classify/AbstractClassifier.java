@@ -3,28 +3,30 @@ package com.netease.ysf.shine.classify;
 import com.netease.ysf.shine.util.CategoryIndexCache;
 
 import java.io.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class AbstractClassifier implements IClassifier {
 
     private CategoryIndexCache categoryIndexCache = new CategoryIndexCache();
 
     public void learn(File file) {
-        List<DataLine> dataLines = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             DataLine dataLine = null;
-            while ((dataLine = Util.readFromFile(reader)) != null) {
-                dataLines.add(dataLine);
-            }
-            Collections.shuffle(dataLines);
             int progress = 0;
-            for (DataLine dataLine1 : dataLines) {
-                learn(dataLine1.getVector(), categoryIndexCache.getIndexOf(dataLine1.getCategory()));
-                printProgress(progress++, dataLines.size());
+            while ((dataLine = Util.readFromFile(reader)) != null) {
+                learn(dataLine.getVector(), categoryIndexCache.getIndexOf(dataLine.getCategory()));
+                printProgress(progress++, 240000);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public int getCategory(double[] vector) {
+        int index = predict(vector);
+        Integer category = categoryIndexCache.getCategoryOf(index);
+        return category == null ? -1 : category;
     }
 
     private void printProgress(int progress, int total) {
@@ -65,12 +67,13 @@ public abstract class AbstractClassifier implements IClassifier {
         return statisticsMap;
     }
 
-    public void saveModel(String file) {
+    protected void saveModel(String file, Object model) {
         ObjectOutputStream oos = null;
         try {
             FileOutputStream fos = new FileOutputStream(file);
             oos = new ObjectOutputStream(fos);
-            oos.writeObject(this);
+            oos.writeObject(model);
+            oos.writeObject(categoryIndexCache);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -80,6 +83,21 @@ public abstract class AbstractClassifier implements IClassifier {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }
+        }
+    }
+
+    protected Object loadModel(String modelFile) throws IOException, ClassNotFoundException {
+        ObjectInputStream ois = null;
+        try {
+            FileInputStream fis = new FileInputStream(modelFile);
+            ois = new ObjectInputStream(fis);
+            Object model =  ois.readObject();
+            categoryIndexCache = (CategoryIndexCache) ois.readObject();
+            return model;
+        }  finally {
+            if (ois != null) {
+                ois.close();
             }
         }
     }

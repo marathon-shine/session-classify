@@ -79,7 +79,8 @@ public class GetTypeInfo {
                 // Ignore
             }
         }
-        return map.get(input);
+        String desc = map.get(input);
+        return desc == null ? "未分类" : desc;
     }
 
     public static void main(String[] args) throws IOException {

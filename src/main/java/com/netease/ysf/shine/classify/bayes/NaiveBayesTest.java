@@ -6,8 +6,8 @@ import java.io.File;
 
 public class NaiveBayesTest {
 
-    private static final String TRAIN_FILE = "/work/marathon/dataset/top_keyword_train.txt";
-    private static final String TEST_FILE = "/work/marathon/dataset/top_keyword_test.txt";
+    private static final String TRAIN_FILE = "/work/marathon/dataset/5000.txt.trainingSet.txt";
+    private static final String TEST_FILE = "/work/marathon/dataset/5000.txt.testingSet.txt";
 
     private static final String MODEL_FILE = "/work/marathon/model_bayes.bin";
 

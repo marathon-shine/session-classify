@@ -23,7 +23,7 @@ public class FileProcessor {
 //        fileStatistics("parsed_all_session.txt.doc2vec.tran.txt");
 
         splitTranAndTestFile(
-                "parsed_all_session.withtype.txt.training.withtype.txt.TopKeywords_3000-300.bagofwords.vec.txt",
+                "5000.txt",
                 0.8d);
 
 //        fetchTranFile("parsed_all_session.withtype.txt", false);
@@ -79,36 +79,41 @@ public class FileProcessor {
         File inputFile = new File(Constants.fileBase + inputFileName );
         LineIterator it = FileUtils.lineIterator(inputFile, "UTF-8");
 
-        Map<String, List<String>> store = new HashMap<>();
+        final int AMOUNT_BY_CATEGORY = 5000;
+
+        File outputFileTran = new File(Constants.fileBase + inputFileName + ".trainingSet.txt");
+        File outputFileTest = new File(Constants.fileBase + inputFileName + ".testingSet.txt");
+
+        Set<String> filterred = new HashSet<>();
+        filterred.add("1228523");
+        filterred.add("973944");
+        filterred.add("698732");
+        filterred.add("747990");
+        filterred.add("1236167");
+        filterred.add("694980");
+        filterred.add("920518");
+        filterred.add("1236180");
+        filterred.add("1235155");
+        filterred.add("787122");
+        Map<String, Integer> store = new HashMap<>();
         try {
             while (it.hasNext()) {
                 String line = it.nextLine();
                 String[] splitted = line.split(Constants.spllitter);
                 String type = splitted[0];
-                String content = splitted[1];
-                if( !store.containsKey(type) ) {
-                    store.put(type, new ArrayList<>());
+                if (filterred.contains(type)) {
+                    continue;
                 }
-                store.get(type).add(content);
+                int count = store.getOrDefault(type, 0);
+                if (count < AMOUNT_BY_CATEGORY * (1 - percentOfTranSet)) {
+                    store.put(type, count + 1);
+                    FileUtils.writeStringToFile(outputFileTest, line+"\n", Charset.defaultCharset(), true);
+                } else {
+                    FileUtils.writeStringToFile(outputFileTran, line+"\n", Charset.defaultCharset(), true);
+                }
             }
         } finally {
             it.close();
-        }
-
-        File outputFileTran = new File(Constants.fileBase + inputFileName + ".trainingSet.txt");
-        File outputFileTest = new File(Constants.fileBase + inputFileName + ".testingSet.txt");
-        for(String type : store.keySet()) {
-            List<String> one = store.get(type);
-            Collections.shuffle(one);
-            int maxCount = (int) Math.floor(one.size() * percentOfTranSet);
-            for(int i=0; i<one.size(); i++) {
-                String line = type + Constants.spllitter + one.get(i);
-                if(i < maxCount) {
-                    FileUtils.writeStringToFile(outputFileTran, line+"\n", Charset.defaultCharset(), true);
-                }else {
-                    FileUtils.writeStringToFile(outputFileTest, line+"\n", Charset.defaultCharset(), true);
-                }
-            }
         }
     }
 
