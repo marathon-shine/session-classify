@@ -1,5 +1,6 @@
 package com.netease.ysf.shine;
 
+import com.alibaba.fastjson.JSONObject;
 import com.netease.ysf.shine.classify.AbstractClassifier;
 import com.netease.ysf.shine.classify.bayes.NaiveBayesClassifier;
 import com.netease.ysf.shine.doc2vec.BagOfWordsUtil;
@@ -36,8 +37,10 @@ public class ShineNow {
         if(text.length() > 0) {
             // 分词
             String cutted = JiebaCutter.cutWord(text);
+            System.out.println("分词结果：" + cutted);
             // 词袋
             double[] vector = BagOfWordsUtil.getVector(cutted);
+            System.out.println("词袋向量：" + JSONObject.toJSONString(vector));
             // 分类
             int[] indexes = bayesClassifier.predictTop(vector);
             System.out.println("分类可能是：");
